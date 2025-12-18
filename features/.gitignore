@@ -22,11 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Node modules
 node_modules/
-package-lock.json/
-features/node_modules
-features/package-lock.json
-back/node_modules
+back/node_modules/
+features/node_modules/
+
+# Package lock
+package-lock.json
 back/package-lock.json
+features/package-lock.json
+
+# Env files
 back/.env
+
+# Other JSON (optional)
 back/collection.json
