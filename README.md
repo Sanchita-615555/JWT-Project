@@ -38,13 +38,13 @@ This project demonstrates secure user authentication with signup, login, and pro
 
 ### Frontend
 
-npm i
-cd features
-npm run dev
+1. npm i
+2. cd features
+3. npm run dev
 
 
 ### Backend
 
-cd back
-npm i
-node server.js
+1. cd back
+2. npm i
+3. node server.js
