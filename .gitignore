@@ -1,0 +1,15 @@
+# Node modules
+node_modules/
+back/node_modules/
+features/node_modules/
+
+# Package lock
+package-lock.json
+back/package-lock.json
+features/package-lock.json
+
+# Env files
+back/.env
+
+# Other JSON (optional)
+back/collection.json
