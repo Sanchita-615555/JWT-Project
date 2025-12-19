@@ -12,7 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Root route
+app.get("/", (req, res) => {
+  res.send("JWT Project API is running 🚀");
+});
+
+// Signup route
 app.post("/signup", async (req, res) => {
   try {
     const usersCollection = getUsersCollection();
@@ -30,6 +35,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// Login route
 app.post("/login", async (req, res) => {
   try {
     const usersCollection = getUsersCollection();
@@ -53,6 +59,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Auth middleware
 function auth(req, res, next) {
   const header = req.headers.authorization;
   if (!header) return res.status(403).json({ message: "Token required" });
@@ -66,6 +73,7 @@ function auth(req, res, next) {
   }
 }
 
+// Profile route (protected)
 app.get("/profile", auth, async (req, res) => {
   const usersCollection = getUsersCollection();
   const user = await usersCollection.findOne({
@@ -81,9 +89,9 @@ const PORT = process.env.PORT || 5000;
 connectDB()
   .then(() => {
     app.listen(PORT, () =>
-      console.log(` Server running on port ${PORT}`)
+      console.log(`Server running on port ${PORT}`)
     );
   })
   .catch((err) => {
-    console.error(" MongoDB connection failed", err);
+    console.error("MongoDB connection failed", err);
   });
