@@ -75,15 +75,15 @@ app.get("/profile", auth, async (req, res) => {
   res.json({ email: user.email, id: user._id });
 });
 
-// ✅ IMPORTANT PART (Render fix)
+//  IMPORTANT PART (Render fix)
 const PORT = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {
     app.listen(PORT, () =>
-      console.log(`✅ Server running on port ${PORT}`)
+      console.log(` Server running on port ${PORT}`)
     );
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection failed", err);
+    console.error(" MongoDB connection failed", err);
   });
