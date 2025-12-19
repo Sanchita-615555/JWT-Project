@@ -10,6 +10,7 @@ features/package-lock.json
 
 # Env files
 back/.env
+features/.env
 
 # Other JSON (optional)
 back/collection.json

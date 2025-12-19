@@ -1,42 +1,38 @@
 import { useState } from "react";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profile, setProfile] = useState(null);
 
-  // Signup
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/signup", {
+      const res = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
       if (!res.ok) return alert(data.message);
-
       alert(data.message);
     } catch {
       alert("Server not reachable");
     }
   };
 
-  // Login
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
       if (!res.ok) return alert(data.message);
-
       localStorage.setItem("token", data.token);
       alert("Login successful");
     } catch {
@@ -44,22 +40,22 @@ function App() {
     }
   };
 
-  // Get Profile
   const getProfile = async () => {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please login first");
 
-    const res = await fetch("http://localhost:5000/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const data = await res.json();
-    if (!res.ok) return alert(data.message);
-
-    setProfile(data);
+    try {
+      const res = await fetch(`${BASE_URL}/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) return alert(data.message);
+      setProfile(data);
+    } catch {
+      alert("Server not reachable");
+    }
   };
 
-  // Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     setProfile(null);
@@ -72,8 +68,6 @@ function App() {
         <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">
           JWT Mini Project
         </h1>
-
-        {/* Signup */}
         <form onSubmit={handleSignup} className="space-y-4">
           <input
             type="email"
@@ -95,16 +89,12 @@ function App() {
             Signup
           </button>
         </form>
-
-        {/* Login */}
         <button
           onClick={handleLogin}
           className="w-full mt-4 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
         >
           Login
         </button>
-
-        {/* Actions */}
         <div className="flex gap-3 mt-4">
           <button
             onClick={getProfile}
@@ -119,8 +109,6 @@ function App() {
             Logout
           </button>
         </div>
-
-        {/* Profile */}
         {profile && (
           <div className="mt-6 bg-gray-100 p-4 rounded-lg text-sm">
             <h2 className="font-semibold mb-2">Profile</h2>
