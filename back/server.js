@@ -8,27 +8,13 @@ const { ObjectId } = require("mongodb");
 
 const app = express();
 
-
 // Middleware
-
-
-// Enable CORS for React dev server
-
 app.use(cors());
+app.use(express.json());
 
-
-app.use(express.json()); // Parse JSON bodies
-
-
-// Connect MongoDB
-
-connectDB();
-
-// Signup Route
-
+// Routes
 app.post("/signup", async (req, res) => {
   try {
-    console.log("Signup request body:", req.body);
     const usersCollection = getUsersCollection();
     const { email, password } = req.body;
 
@@ -40,17 +26,12 @@ app.post("/signup", async (req, res) => {
 
     res.json({ message: "Signup successful" });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// Login Route
-
 app.post("/login", async (req, res) => {
   try {
-    console.log("Login request body:", req.body);
     const usersCollection = getUsersCollection();
     const { email, password } = req.body;
 
@@ -62,51 +43,47 @@ app.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.SECRET_KEY,
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     res.json({ message: "Login successful", token });
-  } catch (err) {
-    console.error(err);
+  } catch {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// Auth Middleware
-
 function auth(req, res, next) {
-  const header = req.headers["authorization"];
+  const header = req.headers.authorization;
   if (!header) return res.status(403).json({ message: "Token required" });
 
   const token = header.split(" ")[1];
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.user = decoded;
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
     next();
   } catch {
-    return res.status(401).json({ message: "Invalid or expired token" });
+    res.status(401).json({ message: "Invalid token" });
   }
 }
 
-
-// Profile Route (Protected)
 app.get("/profile", auth, async (req, res) => {
-  try {
-    const usersCollection = getUsersCollection();
-    const user = await usersCollection.findOne({ _id: new ObjectId(req.user.id) });
-    if (!user) return res.status(404).json({ message: "User not found" });
+  const usersCollection = getUsersCollection();
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(req.user.id),
+  });
 
-    res.json({ email: user.email, id: user._id });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
+  res.json({ email: user.email, id: user._id });
 });
 
-
-// Start Server
-
+// ✅ IMPORTANT PART (Render fix)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+connectDB()
+  .then(() => {
+    app.listen(PORT, () =>
+      console.log(`✅ Server running on port ${PORT}`)
+    );
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed", err);
+  });
