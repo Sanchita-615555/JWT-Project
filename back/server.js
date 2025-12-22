@@ -10,7 +10,8 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: "*",
+    
+    origin: "https://jwt-project-five.vercel.app",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }));
