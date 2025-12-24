@@ -8,13 +8,18 @@ const { ObjectId } = require("mongodb");
 
 const app = express();
 
-// Middleware
+// ✅ FIXED CORS (Laptop + Mobile both)
 app.use(cors({
-    
-    origin: "https://jwt-project-five.vercel.app",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }));
+  origin: [
+    "https://jwt-project-five.vercel.app",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
+
+// ✅ Handle preflight requests
+
+
 app.use(express.json());
 
 // Root route
@@ -78,7 +83,7 @@ function auth(req, res, next) {
   }
 }
 
-// Profile route (protected)
+// Profile route
 app.get("/profile", auth, async (req, res) => {
   const usersCollection = getUsersCollection();
   const user = await usersCollection.findOne({
@@ -88,7 +93,7 @@ app.get("/profile", auth, async (req, res) => {
   res.json({ email: user.email, id: user._id });
 });
 
-//  IMPORTANT PART (Render fix)
+// Render fix
 const PORT = process.env.PORT || 5000;
 
 connectDB()
