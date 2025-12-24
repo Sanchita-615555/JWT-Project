@@ -59,7 +59,7 @@ app.post("/login", async (req, res) => {
     if (!match) return res.status(400).json({ message: "Invalid password" });
 
     // ✅ Debug JWT secret
-    console.log("JWT_SECRET =", process.env.JWT_SECRET);
+    console.log("SECRET_KEY =", process.env.SECRET_KEY);
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
