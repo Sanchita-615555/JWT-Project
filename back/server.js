@@ -65,10 +65,11 @@ app.post("/login", async (req, res) => {
 
     res.json({ message: "Login successful", token });
   } catch (err) {
-    console.error(err);  // ✅ log the actual error
+    console.error("LOGIN ERROR:", err);  // ✅ print actual error
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 // Auth middleware
