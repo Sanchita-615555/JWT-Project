@@ -7,7 +7,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [profile, setProfile] = useState(null);
 
-  // ✅ BASE_URL debug log
+  //  BASE_URL debug log
   console.log("BASE_URL =", BASE_URL);
 
   const handleSignup = async (e) => {

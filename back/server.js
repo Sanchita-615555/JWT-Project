@@ -8,7 +8,7 @@ const { ObjectId } = require("mongodb");
 
 const app = express();
 
-// ✅ FIXED CORS (Laptop + Mobile both)
+//  FIXED CORS (Laptop + Mobile both)
 app.use(cors({
   origin: [
     "https://jwt-project-five.vercel.app",
@@ -17,7 +17,7 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ Handle preflight requests
+//  Handle preflight requests
 
 
 app.use(express.json());
@@ -45,7 +45,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// Login route
+
 // Login route
 app.post("/login", async (req, res) => {
   try {
@@ -58,7 +58,7 @@ app.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid password" });
 
-    // ✅ Debug JWT secret
+    //  Debug JWT secret
     console.log("SECRET_KEY =", process.env.SECRET_KEY);
 
     const token = jwt.sign(
@@ -71,7 +71,7 @@ app.post("/login", async (req, res) => {
 
     res.json({ message: "Login successful", token });
   } catch (err) {
-    console.error("LOGIN ERROR:", err);  // ✅ print actual error
+    console.error("LOGIN ERROR:", err);  //  print actual error
     res.status(500).json({ message: "Server error" });
   }
 });
