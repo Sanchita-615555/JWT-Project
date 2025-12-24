@@ -46,6 +46,7 @@ app.post("/signup", async (req, res) => {
 });
 
 // Login route
+// Login route
 app.post("/login", async (req, res) => {
   try {
     const usersCollection = getUsersCollection();
@@ -57,11 +58,16 @@ app.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid password" });
 
+    // ✅ Debug JWT secret
+    console.log("JWT_SECRET =", process.env.JWT_SECRET);
+
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
+    console.log("Token generated:", token);
 
     res.json({ message: "Login successful", token });
   } catch (err) {
@@ -69,6 +75,7 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 
