@@ -42,11 +42,11 @@ This project demonstrates secure user authentication with signup, login, and pro
 2. cd features
 3. npm run dev
 
-   
-
-##  Project link : https://jwt-project-five.vercel.app/
 ### Backend
 
 1. cd back
 2. npm i
 3. node server.js
+
+
+##  Project link : https://jwt-project-five.vercel.app/
