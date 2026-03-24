@@ -40,15 +40,15 @@ React (Vite) for frontend and Node.js + Express + MongoDB for backend.
 
 ### Frontend
 
-npm i
-cd features
-npm run dev
+1. npm i
+2. cd features
+3. npm run dev
 
 ### Backend
 
-cd back
-npm i
-node server.js
+1. cd back
+2. npm i
+3. node server.js
 
 Project Link :
 https://jwt-project-five.vercel.app/
