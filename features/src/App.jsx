@@ -6,53 +6,40 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
 
+  //  BASE_URL debug log
   console.log("BASE_URL =", BASE_URL);
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     try {
       const res = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
       if (!res.ok) return alert(data.message);
-
       alert(data.message);
-      setEmail("");
-      setPassword("");
     } catch {
       alert("Server not reachable");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleLogin = async () => {
-    setLoading(true);
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
       if (!res.ok) return alert(data.message);
-
       localStorage.setItem("token", data.token);
       alert("Login successful");
     } catch {
       alert("Server not reachable");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -60,21 +47,15 @@ function App() {
     const token = localStorage.getItem("token");
     if (!token) return alert("Please login first");
 
-    setLoading(true);
-
     try {
       const res = await fetch(`${BASE_URL}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       const data = await res.json();
       if (!res.ok) return alert(data.message);
-
       setProfile(data);
     } catch {
       alert("Server not reachable");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -85,16 +66,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200 px-4">
-      
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md">
-        
-        <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-600 mb-6">
-          JWT Auth System
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">
+          JWT Mini Project
         </h1>
-
-        {/* Signup Form */}
-        <form onSubmit={handleSignup} className="space-y-3">
+        <form onSubmit={handleSignup} className="space-y-4">
           <input
             type="email"
             placeholder="Email"
@@ -103,7 +80,6 @@ function App() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
           <input
             type="password"
             placeholder="Password"
@@ -112,34 +88,23 @@ function App() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          <button
-            disabled={loading}
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? "Processing..." : "Signup"}
+          <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+            Signup
           </button>
         </form>
-
-        {/* Login */}
         <button
           onClick={handleLogin}
-          disabled={loading}
-          className="w-full mt-3 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 disabled:opacity-50"
+          className="w-full mt-4 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600"
         >
           Login
         </button>
-
-        {/* Actions */}
-        <div className="flex gap-3 mt-3">
+        <div className="flex gap-3 mt-4">
           <button
             onClick={getProfile}
-            disabled={loading}
-            className="flex-1 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 disabled:opacity-50"
+            className="flex-1 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600"
           >
-            Profile
+            Get Profile
           </button>
-
           <button
             onClick={handleLogout}
             className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
@@ -147,11 +112,9 @@ function App() {
             Logout
           </button>
         </div>
-
-        {/* Profile */}
         {profile && (
-          <div className="mt-5 bg-gray-100 p-3 rounded-lg text-xs sm:text-sm overflow-auto max-h-40">
-            <h2 className="font-semibold mb-2 text-gray-700">Profile</h2>
+          <div className="mt-6 bg-gray-100 p-4 rounded-lg text-sm">
+            <h2 className="font-semibold mb-2">Profile</h2>
             <pre>{JSON.stringify(profile, null, 2)}</pre>
           </div>
         )}
